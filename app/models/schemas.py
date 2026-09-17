@@ -9,3 +9,8 @@ class SalesforceCredentials(BaseModel):
     username: Optional[str] = None
     password: Optional[str] = None
     security_token: Optional[str] = None
+
+class ScanStartRequest(BaseModel):
+    organization_id: str
+    object_name: str
+    soql: str
