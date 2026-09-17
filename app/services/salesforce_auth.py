@@ -15,23 +15,29 @@ class SalesforceAuthClient:
         """
         token_url = f"{credentials.login_url.rstrip('/')}/services/oauth2/token"
         
-        if not credentials.username or not credentials.password:
-            raise ValueError("Username and password are required for this flow.")
-            
-        data = {
-            "grant_type": "password",
-            "client_id": credentials.client_id,
-            "client_secret": credentials.client_secret,
-            "username": credentials.username,
-            "password": f"{credentials.password}{credentials.security_token or ''}"
-        }
+        if credentials.grant_type == "password":
+            if not credentials.username or not credentials.password:
+                raise ValueError("Username and password are required for password grant flow.")
+            data = {
+                "grant_type": "password",
+                "client_id": credentials.client_id,
+                "client_secret": credentials.client_secret,
+                "username": credentials.username,
+                "password": f"{credentials.password}{credentials.security_token or ''}"
+            }
+        else:
+            data = {
+                "grant_type": "client_credentials",
+                "client_id": credentials.client_id,
+                "client_secret": credentials.client_secret
+            }
         
         async with httpx.AsyncClient() as client:
             response = await client.post(token_url, data=data)
             
             if response.status_code != 200:
                 logger.error(f"Salesforce Auth Failed: {response.text}")
-                raise HTTPException(status_code=401, detail="Failed to authenticate with Salesforce. Please check credentials.")
+                raise HTTPException(status_code=401, detail=f"Salesforce Error: {response.text}")
                 
             return response.json()
             
