@@ -8,3 +8,4 @@ pandas
 pyarrow
 pydantic-settings
 python-multipart
+aiofiles
