@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+httpx
+boto3
+pandas
+pyarrow
+pydantic-settings
+python-multipart
