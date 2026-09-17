@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.core.database import engine
 from app.models.base import Base
 from app.models.job import Job
+from app.api import credentials
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,6 +18,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
+
+app.include_router(credentials.router)
 
 @app.get("/api/health")
 async def health_check():
