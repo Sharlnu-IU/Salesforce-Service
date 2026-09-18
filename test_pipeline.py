@@ -8,22 +8,15 @@ logging.basicConfig(level=logging.INFO)
 async def main():
     print("Testing End-to-End Pipeline...")
     
-    # Use the test credentials for this script
-    creds = SalesforceCredentials(
-        login_url=settings.SF_LOGIN_URL,
-        client_id=settings.SF_CLIENT_ID,
-        client_secret=settings.SF_CLIENT_SECRET,
-        grant_type='client_credentials'
-    )
-    
     pipeline = PipelineService()
     
     soql = "SELECT Id, Name, Type, BillingCity, BillingState, BillingStreet, BillingPostalCode, BillingCountry FROM Account"
     
     await pipeline.run_pipeline(
+        scan_id="test_local_scan_id",
         object_name="Account",
         soql=soql,
-        credentials=creds
+        credentials=None
     )
     print("Test finished!")
 
